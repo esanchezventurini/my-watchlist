@@ -1,0 +1,15 @@
+# JetBrains IDE
+.idea/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+*.env
+
+# SQLite
+*.db
+*.db.schema_hash
+

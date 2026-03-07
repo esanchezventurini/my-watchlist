@@ -3,15 +3,15 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.models.user import User
-from app.schemas.user import UserCreate, UserUpdate
+from app.schemas.user import UserUpdate
 
 
 class UserRepository:
     def __init__(self, db: Session):
         self.db = db
 
-    def create(self, user_in: UserCreate) -> User:
-        user = User(**user_in.model_dump())
+    def create_from_dict(self, data: dict) -> User:
+        user = User(**data)
         self.db.add(user)
         self.db.commit()
         self.db.refresh(user)
