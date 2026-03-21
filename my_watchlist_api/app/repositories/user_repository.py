@@ -42,7 +42,6 @@ class UserRepository:
         for field, value in update_data.items():
             setattr(user, field, value)
 
-        #self.db.add(user)
         self.db.commit()
         self.db.refresh(user)
         return user
