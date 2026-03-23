@@ -5,6 +5,7 @@ from sqlalchemy import DateTime, String, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
+from app.models.viewing import Viewing
 from app.models.watchlist import Watchlist
 from app.models.watchlist_movie import watchlist_movie_table
 
@@ -21,4 +22,8 @@ class Movie(Base):
 
     watchlists: Mapped[List["Watchlist"]] = relationship(
         "Watchlist", secondary=watchlist_movie_table, back_populates="movies"
+    )
+
+    viewings: Mapped[List["Viewing"]] = relationship(
+        "Viewing", back_populates="movie"
     )

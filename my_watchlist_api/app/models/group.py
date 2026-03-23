@@ -28,9 +28,9 @@ class Group(Base):
     )
 
     watchlists: Mapped[List["Watchlist"]] = relationship(
-        "Watchlist", back_populates="groups"
+        "Watchlist", back_populates="group"
     )
 
     viewings: Mapped[List["Viewing"]] = relationship(
-        "Viewing", back_populates="groups"
+        "Viewing", back_populates="group"
     )

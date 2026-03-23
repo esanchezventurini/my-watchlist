@@ -31,9 +31,9 @@ class User(Base):
     )
 
     watchlists: Mapped[List["Watchlist"]] = relationship(
-        "Watchlist", back_populates="user"
+        "Watchlist", back_populates="user", cascade="all, delete-orphan"
     )
 
     viewings: Mapped[List["Viewing"]] = relationship(
-        "Viewing", back_populates="users"
+        "Viewing", back_populates="user", cascade="all, delete-orphan"
     )
