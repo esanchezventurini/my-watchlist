@@ -7,13 +7,13 @@ from sqlalchemy import DateTime, String, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
-from app.models.user_group import user_group_table
 
+# Needed to avoid circular dependency
 if TYPE_CHECKING:
     from app.models.user import User
     from app.models.watchlist import Watchlist
     from app.models.viewing import Viewing
-
+    from app.models.user_group import UserGroup
 
 class Group(Base):
     __tablename__ = "groups"
@@ -24,7 +24,7 @@ class Group(Base):
     created_date: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
     users: Mapped[List["User"]] = relationship(
-        "User", secondary=user_group_table, back_populates="groups"
+        "User", secondary="user_groups", back_populates="groups", viewonly=True
     )
 
     watchlists: Mapped[List["Watchlist"]] = relationship(
@@ -33,4 +33,8 @@ class Group(Base):
 
     viewings: Mapped[List["Viewing"]] = relationship(
         "Viewing", back_populates="group"
+    )
+
+    user_groups: Mapped[List["UserGroup"]] = relationship(
+        "UserGroup", back_populates="group", cascade="all, delete-orphan"
     )

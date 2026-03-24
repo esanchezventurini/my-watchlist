@@ -7,12 +7,12 @@ from sqlalchemy import DateTime, String, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
-from app.models.user_group import user_group_table
 
 if TYPE_CHECKING:
     from app.models.group import Group
     from app.models.watchlist import Watchlist
     from app.models.viewing import Viewing
+    from app.models.user_group import UserGroup
 
 
 class User(Base):
@@ -27,7 +27,7 @@ class User(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
     groups: Mapped[List["Group"]] = relationship(
-        "Group", secondary=user_group_table, back_populates="users"
+        "Group", secondary="user_groups", back_populates="users", viewonly=True
     )
 
     watchlists: Mapped[List["Watchlist"]] = relationship(
@@ -36,4 +36,8 @@ class User(Base):
 
     viewings: Mapped[List["Viewing"]] = relationship(
         "Viewing", back_populates="user", cascade="all, delete-orphan"
+    )
+
+    user_groups: Mapped[List["UserGroup"]] = relationship(
+        "UserGroup", back_populates="user", cascade="all, delete-orphan"
     )
