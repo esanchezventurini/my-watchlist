@@ -11,6 +11,7 @@ from app.models.movie import Movie  # noqa: F401
 from app.models.viewing import Viewing  # noqa: F401
 from app.models.watchlist_movie import watchlist_movie_table  # noqa: F401
 from app.models.user_group import UserGroup # noqa: F401
+from app.models.group_request import GroupRequest # noqa: F401
 
 Base.metadata.create_all(bind=engine)
 

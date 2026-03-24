@@ -2,6 +2,8 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session, selectinload
 
 from app.models.group import Group
+from app.models.user import User
+from app.models.user_group import UserGroup
 
 
 class GroupRepository:
@@ -24,11 +26,19 @@ class GroupRepository:
         return list(self.db.execute(stmt).scalars().all())
 
 
-    def create_from_dict(self, data: dict) -> Group:
+    def create_from_dict(self, data: dict, creator: User) -> Group:
         group = Group(**data)
+
+        user_group = UserGroup(
+            user=creator,
+            admin=1
+        )
+        group.user_groups.append(user_group)
+
         self.db.add(group)
         self.db.commit()
         self.db.refresh(group)
+
         return group
 
 

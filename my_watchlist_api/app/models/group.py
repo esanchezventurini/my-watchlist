@@ -7,6 +7,7 @@ from sqlalchemy import DateTime, String, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
+from app.models.group_request import GroupRequest
 
 # Needed to avoid circular dependency
 if TYPE_CHECKING:
@@ -37,4 +38,8 @@ class Group(Base):
 
     user_groups: Mapped[List["UserGroup"]] = relationship(
         "UserGroup", back_populates="group", cascade="all, delete-orphan"
+    )
+
+    requests: Mapped[List["GroupRequest"]] = relationship(
+        "GroupRequest", back_populates="group", cascade="all, delete-orphan"
     )
