@@ -22,6 +22,7 @@ class Group(Base):
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
     name: Mapped[str] = mapped_column(String(80), unique=False, nullable=False, index=True)
     description: Mapped[str] = mapped_column(String(), nullable=True)
+    public: Mapped[bool] = mapped_column(nullable=False, default=True)
     created_date: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
     users: Mapped[List["User"]] = relationship(

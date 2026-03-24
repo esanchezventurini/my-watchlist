@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, Query
 
 from app.core.security import get_current_user
 from app.dependencies import get_group_service
-from app.schemas.group import GroupRead, GroupCreate, GroupUpdate
+from app.schemas.group import GroupRead, GroupCreate, GroupUpdate, GroupRequestCreate
 
 router = APIRouter(prefix="/groups", tags=["groups"])
 
@@ -41,3 +41,26 @@ def delete_group(group_id: int,
                  group_service = Depends(get_group_service),
                  current_user = Depends(get_current_user)):
     return group_service.delete_group(group_id, current_user)
+
+
+@router.post("/{group_id}/requests")
+def request_to_join_group(group_id: int,
+                          group_request_in: GroupRequestCreate,
+                          group_service = Depends(get_group_service),
+                          current_user = Depends(get_current_user)):
+    return group_service.request_to_join_group(group_id, group_request_in, current_user)
+
+
+@router.post("/{group_id}/members")
+def request_to_join_group(group_id: int,
+                          group_service = Depends(get_group_service),
+                          current_user = Depends(get_current_user)):
+    return group_service.join_group(group_id, current_user)
+
+
+@router.post("/{group_id}/requests/{request_id}/approve")
+def approve_group_join_request(group_id: int,
+                               request_id: int,
+                               group_service = Depends(get_group_service),
+                               current_user = Depends(get_current_user)):
+    return group_service.approve_group_join_request(group_id, request_id, current_user)

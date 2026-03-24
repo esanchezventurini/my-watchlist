@@ -6,6 +6,7 @@ from pydantic import BaseModel, ConfigDict, Field
 class GroupBase(BaseModel):
     name: str
     description: str
+    public: bool = True
 
 
 class GroupCreate(GroupBase):
@@ -51,11 +52,13 @@ class Watchlist(BaseModel):
 class GroupRead(GroupBase):
     id: int
     created_date: datetime
+    public: bool
     members: list[Member] = Field(default_factory=list)
     watchlist: list[Watchlist] = Field(default_factory=list)
 
     model_config = ConfigDict(from_attributes=True)
 
 
-
+class GroupRequestCreate(BaseModel):
+    reason: str
 
