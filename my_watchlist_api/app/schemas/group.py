@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class GroupBase(BaseModel):
@@ -51,8 +51,8 @@ class Watchlist(BaseModel):
 class GroupRead(GroupBase):
     id: int
     created_date: datetime
-    members: list[Member]
-    watchlist: list[Watchlist]
+    members: list[Member] = Field(default_factory=list)
+    watchlist: list[Watchlist] = Field(default_factory=list)
 
     model_config = ConfigDict(from_attributes=True)
 

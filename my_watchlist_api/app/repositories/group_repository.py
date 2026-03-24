@@ -18,6 +18,20 @@ class GroupRepository:
             .first()
         )
 
+
     def list(self, skip: int = 0, limit: int = 100) -> list[Group]:
         stmt = select(Group).offset(skip).limit(limit)
         return list(self.db.execute(stmt).scalars().all())
+
+
+    def create_from_dict(self, data: dict) -> Group:
+        group = Group(**data)
+        self.db.add(group)
+        self.db.commit()
+        self.db.refresh(group)
+        return group
+
+
+    def delete(self, group: Group) -> None:
+        self.db.delete(group)
+        self.db.commit()

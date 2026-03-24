@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, Query
 
 from app.dependencies import get_group_service
-from app.schemas.group import GroupRead
+from app.schemas.group import GroupRead, GroupCreate
 
 router = APIRouter(prefix="/groups", tags=["users"])
 
@@ -18,3 +18,13 @@ def list_groups(
 @router.get("/{group_id}", response_model=GroupRead)
 def get_group_by_id(group_id: int, group_service = Depends(get_group_service)):
     return group_service.get_group(group_id)
+
+
+@router.post("/", response_model=GroupRead)
+def create_group(group_in: GroupCreate, group_service = Depends(get_group_service)):
+    return group_service.create_group(group_in)
+
+
+@router.delete("/{group_id}")
+def delete_group(group_id: int, group_service = Depends(get_group_service)):
+    return group_service.delete_group(group_id)
