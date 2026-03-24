@@ -42,6 +42,17 @@ class GroupRepository:
         return group
 
 
+    def update_from_dict(self, group: Group, data: dict) -> Group:
+        for key, value in data.items():
+            setattr(group, key, value)
+
+        self.db.add(group)
+        self.db.commit()
+        self.db.refresh(group)
+
+        return group
+
+
     def delete(self, group: Group) -> None:
         self.db.delete(group)
         self.db.commit()

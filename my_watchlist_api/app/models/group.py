@@ -28,16 +28,16 @@ class Group(Base):
         "User", secondary="user_groups", back_populates="groups", viewonly=True
     )
 
+    user_groups: Mapped[List["UserGroup"]] = relationship(
+        "UserGroup", back_populates="group", cascade="all, delete-orphan"
+    )
+
     watchlists: Mapped[List["Watchlist"]] = relationship(
         "Watchlist", back_populates="group"
     )
 
     viewings: Mapped[List["Viewing"]] = relationship(
         "Viewing", back_populates="group"
-    )
-
-    user_groups: Mapped[List["UserGroup"]] = relationship(
-        "UserGroup", back_populates="group", cascade="all, delete-orphan"
     )
 
     requests: Mapped[List["GroupRequest"]] = relationship(

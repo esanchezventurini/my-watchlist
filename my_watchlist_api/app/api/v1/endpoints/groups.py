@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, Query
 
 from app.core.security import get_current_user
 from app.dependencies import get_group_service
-from app.schemas.group import GroupRead, GroupCreate
+from app.schemas.group import GroupRead, GroupCreate, GroupUpdate
 
 router = APIRouter(prefix="/groups", tags=["groups"])
 
@@ -26,6 +26,14 @@ def create_group(group_in: GroupCreate,
                  group_service = Depends(get_group_service),
                  current_user = Depends(get_current_user)):
     return group_service.create_group(group_in, current_user)
+
+
+@router.patch("/{group_id}", response_model=GroupRead)
+def update_group(group_id: int,
+                 group_in: GroupUpdate,
+                 group_service = Depends(get_group_service),
+                 current_user = Depends(get_current_user)):
+    return group_service.update_group(group_id, group_in, current_user)
 
 
 @router.delete("/{group_id}")

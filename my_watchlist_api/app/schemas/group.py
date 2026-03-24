@@ -12,7 +12,7 @@ class GroupCreate(GroupBase):
     pass
 
 
-class GroupUpdate(GroupCreate):
+class GroupUpdate(GroupBase):
     pass
 
 
