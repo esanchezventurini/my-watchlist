@@ -11,6 +11,7 @@ from sqlalchemy.orm import Session
 
 from app.core.config import settings
 from app.db.session import get_db
+from app.exceptions.auth import NotAuthenticatedException
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
 
@@ -44,25 +45,19 @@ def get_current_user(
 ):
     from app.repositories.user_repository import UserRepository
 
-    credentials_exception = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Could not validate credentials",
-        headers={"WWW-Authenticate": "Bearer"},
-    )
-
     try:
         payload = jwt.decode(
             token, settings.jwt_secret_key, algorithms=[settings.jwt_algorithm]
         )
         user_id: int = payload.get("sub")
         if user_id is None:
-            raise credentials_exception
+            raise NotAuthenticatedException()
     except InvalidTokenError:
-        raise credentials_exception
+        raise NotAuthenticatedException()
 
     user = UserRepository(db).get(user_id)
     if user is None:
-        raise credentials_exception
+        raise NotAuthenticatedException()
     return user
 
 
