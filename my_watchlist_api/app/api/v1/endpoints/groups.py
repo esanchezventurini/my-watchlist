@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, Query
 
 from app.core.security import get_current_user
-from app.dependencies import get_group_service
+from app.dependencies.dependencies import get_group_service
 from app.schemas.group import GroupRead, GroupCreate, GroupUpdate, GroupRequestCreate
 
 router = APIRouter(prefix="/groups", tags=["groups"])

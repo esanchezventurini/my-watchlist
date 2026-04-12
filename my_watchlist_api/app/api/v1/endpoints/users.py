@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, Query, status
 
 from app.core.security import get_current_user
-from app.dependencies import get_user_service
+from app.dependencies.dependencies import get_user_service
 from app.schemas.user import UserCreate, UserRead, UserUpdate, PublicUserRead
 
 router = APIRouter(prefix="/users", tags=["users"])
