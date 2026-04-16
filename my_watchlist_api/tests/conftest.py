@@ -4,6 +4,13 @@ Shared pytest fixtures for the test suite.
 Uses an in-memory SQLite database so tests are fast, isolated, and never
 touch the real my_watchlist.db file.
 """
+import os
+
+# Must be set before any app module is imported so pydantic-settings picks
+# up SQLite instead of the real PostgreSQL URL from .env
+os.environ["DATABASE_URL"] = "sqlite:///:memory:"
+os.environ.setdefault("JWT_SECRET_KEY", "test-secret-key")
+
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
