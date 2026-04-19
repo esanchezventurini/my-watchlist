@@ -1,56 +1,40 @@
-from fastapi import APIRouter, Depends, HTTPException, Query, status
-from sqlalchemy.orm import Session
+from fastapi import APIRouter, Depends, Query, status
 
-from app.db.session import get_db
-from app.repositories.user_repository import UserRepository
-from app.schemas.user import UserCreate, UserRead, UserUpdate
+from app.core.security import get_current_user
+from app.dependencies.dependencies import get_user_service
+from app.schemas.user import UserCreate, UserRead, UserUpdate, PublicUserRead
 
 router = APIRouter(prefix="/users", tags=["users"])
 
 
 @router.post("/", response_model=UserRead, status_code=status.HTTP_201_CREATED)
-def create_user(user_in: UserCreate, db: Session = Depends(get_db)):
-    repo = UserRepository(db)
-
-    existing_user = repo.get_by_username(user_in.username)
-    if existing_user:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Username already exists")
-
-    return repo.create(user_in)
+def create_user(user_in: UserCreate, user_service = Depends(get_user_service)):
+    return user_service.create_user(user_in)
 
 
-@router.get("/", response_model=list[UserRead])
+@router.get("/", response_model=list[PublicUserRead])
 def list_users(
     skip: int = Query(default=0, ge=0),
     limit: int = Query(default=100, ge=1, le=500),
-    db: Session = Depends(get_db),
+    user_service = Depends(get_user_service)
 ):
-    repo = UserRepository(db)
-    return repo.list(skip=skip, limit=limit)
+    return user_service.list_users(skip=skip, limit=limit)
 
 
-@router.get("/{user_id}", response_model=UserRead)
-def get_user(user_id: int, db: Session = Depends(get_db)):
-    repo = UserRepository(db)
-    user = repo.get(user_id)
-    if not user:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
-    return user
+@router.get("/me", response_model=UserRead)
+def get_user(user_service = Depends(get_user_service), current_user = Depends(get_current_user)):
+    return user_service.get_user(current_user.id)
 
 
-@router.put("/{user_id}", response_model=UserRead)
-def update_user(user_id: int, user_in: UserUpdate, db: Session = Depends(get_db)):
-    repo = UserRepository(db)
-    user = repo.get(user_id)
-    if not user:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
-    return repo.update(user, user_in)
+@router.patch("/me", response_model=UserRead)
+def update_user(user_in: UserUpdate,
+                user_service = Depends(get_user_service),
+                current_user = Depends(get_current_user)
+):
+    return user_service.update_user(current_user.id, user_in)
 
 
-@router.delete("/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_user(user_id: int, db: Session = Depends(get_db)):
-    repo = UserRepository(db)
-    user = repo.get(user_id)
-    if not user:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
-    repo.delete(user)
+@router.delete("/me", status_code=status.HTTP_204_NO_CONTENT)
+def delete_user(user_service = Depends(get_user_service), current_user = Depends(get_current_user)):
+    return user_service.delete_user(current_user.id)
+
