@@ -9,8 +9,8 @@ class Settings(BaseSettings):
     jwt_algorithm: str
     jwt_access_token_expire_minutes: int
 
-    omdb_api_key: str
-    omdb_base_url: str
+    movie_provider_api_key: str
+    movie_provider_base_url: str
 
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 

@@ -11,8 +11,8 @@ class MovieProviderClient:
     async def get_movie(movie_title: str) -> MovieSearch | None:
         async with httpx.AsyncClient() as client:
             response = await client.get(
-                settings.omdb_base_url,
-                params={"apikey": settings.omdb_api_key, "t": movie_title},
+                settings.movie_provider_base_url,
+                params={"apikey": settings.movie_provider_api_key, "t": movie_title},
             )
 
         data = response.json()
