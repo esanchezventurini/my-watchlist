@@ -19,6 +19,8 @@ class Movie(Base):
     rating_imdb: Mapped[float] = mapped_column(nullable=False)
     description: Mapped[str] = mapped_column(String(), nullable=False)
     director: Mapped[str] = mapped_column(String(100), nullable=False)
+    genre: Mapped[str] = mapped_column(String(50), nullable=False)
+    imdb_id: Mapped[str] = mapped_column(String(80), unique=True, nullable=False)
 
     watchlists: Mapped[List["Watchlist"]] = relationship(
         "Watchlist", secondary=watchlist_movie_table, back_populates="movies"

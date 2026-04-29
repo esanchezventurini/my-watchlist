@@ -2,6 +2,8 @@ from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from app.schemas.movie import MovieRead
+
 
 class GroupBase(BaseModel):
     name: str
@@ -28,23 +30,12 @@ class Member(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
-class Movie(BaseModel):
-    id: int
-    title: str
-    release_date: datetime
-    rating_imdb: float
-    description: str
-    director: str
-
-    model_config = ConfigDict(from_attributes=True)
-
-
 class Watchlist(BaseModel):
     id: int
     name: str
     description: str | None
     created_at: datetime
-    movies: list[Movie]
+    movies: list[MovieRead]
 
     model_config = ConfigDict(from_attributes=True)
 
