@@ -68,5 +68,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
+          context: ./my_watchlist_api
+          file: ./my_watchlist_api/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/mi-app:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/my_watchlist_api:latest
