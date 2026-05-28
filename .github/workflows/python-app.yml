@@ -58,7 +58,7 @@ jobs:
 
     - name: Test with pytest
       env:
-        DATABASE_URL: postgresql://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@db:5432/${{ secrets.POSTGRES_DB }}
+        DATABASE_URL: postgresql://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@localhost:5432/${{ secrets.POSTGRES_DB }}
         JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
         JWT_ALGORITHM: ${{ secrets.JWT_ALGORITHM }}
         JWT_ACCESS_TOKEN_EXPIRE_MINUTES: ${{ secrets.JWT_ACCESS_TOKEN_EXPIRE_MINUTES }}
