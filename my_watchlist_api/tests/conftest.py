@@ -1,19 +1,11 @@
-"""
-Shared pytest fixtures for the test suite.
-
-Uses an in-memory SQLite database so tests are fast, isolated, and never
-touch the real my_watchlist.db file.
-"""
+from pathlib import Path
 import os
 
-# Must be set before any app module is imported so pydantic-settings picks
-# up SQLite instead of the real PostgreSQL URL from .env
-os.environ["DATABASE_URL"] = "sqlite:///:memory:"
-os.environ.setdefault("JWT_SECRET_KEY", "test-secret-key")
-os.environ.setdefault("JWT_ALGORITHM", "HS256")
-os.environ.setdefault("JWT_ACCESS_TOKEN_EXPIRE_MINUTES", "30")
-os.environ.setdefault("MOVIE_PROVIDER_API_KEY", "test-api-key")
-os.environ.setdefault("MOVIE_PROVIDER_BASE_URL", "http://fake-provider")
+from dotenv import load_dotenv
+
+if os.getenv("CI") != "true":
+    _env_test = Path(__file__).resolve().parent.parent / ".env.test"
+    load_dotenv(_env_test, override=True)
 
 import pytest
 from fastapi.testclient import TestClient
