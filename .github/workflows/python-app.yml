@@ -1,7 +1,12 @@
-name: Python application
+name: My Watchlist API Pipeline
 
 on:
   push:
+    branches:
+      - main
+      - develop
+
+  pull_request:
     branches:
       - main
       - develop
@@ -60,7 +65,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: lint-and-test
 
-    if: github.ref_name == 'main'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
     steps:
       - name: Checkout repo
