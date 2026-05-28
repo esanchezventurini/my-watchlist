@@ -22,12 +22,9 @@ jobs:
       postgres:
         image: postgres:17
         env:
-          DATABASE_URL: postgresql://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@db:5432/${{ secrets.POSTGRES_DB }}
-          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
-          JWT_ALGORITHM: ${{ secrets.JWT_ALGORITHM }}
-          JWT_ACCESS_TOKEN_EXPIRE_MINUTES: ${{ secrets.JWT_ACCESS_TOKEN_EXPIRE_MINUTES }}
-          MOVIE_PROVIDER_API_KEY: ${{ secrets.MOVIE_PROVIDER_API_KEY }}
-          MOVIE_PROVIDER_BASE_URL: ${{ secrets.MOVIE_PROVIDER_BASE_URL }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
         ports:
           - 5432:5432
 
@@ -60,6 +57,13 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
     - name: Test with pytest
+      env:
+        DATABASE_URL: postgresql://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@db:5432/${{ secrets.POSTGRES_DB }}
+        JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+        JWT_ALGORITHM: ${{ secrets.JWT_ALGORITHM }}
+        JWT_ACCESS_TOKEN_EXPIRE_MINUTES: ${{ secrets.JWT_ACCESS_TOKEN_EXPIRE_MINUTES }}
+        MOVIE_PROVIDER_API_KEY: ${{ secrets.MOVIE_PROVIDER_API_KEY }}
+        MOVIE_PROVIDER_BASE_URL: ${{ secrets.MOVIE_PROVIDER_BASE_URL }}
       run: |
         pytest
 
